@@ -5,12 +5,14 @@ export default function CatFacts({}) {
   const [data, setData] = useState({});
   const [fact, setFact] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
     async function load() {
       try {
         const catFact = await getData(
           "https://cors-anywhere.herokuapp.com/https://catfact.ninja/facts"
         );
+
         setData(catFact);
         console.log(catFact);
         if (catFact && catFact.data && catFact.data.length > 0) {
@@ -24,7 +26,7 @@ export default function CatFacts({}) {
         setError("Failed to fetch cat fact. Please try again later.");
         setFact(null);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     }
     load();
@@ -36,7 +38,9 @@ export default function CatFacts({}) {
       </div>
     );
   }
-
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
   return (
     <div>
       <h1>Cat Fact:</h1>

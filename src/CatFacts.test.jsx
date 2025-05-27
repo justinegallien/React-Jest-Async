@@ -1,7 +1,8 @@
 import "@testing-library/jest-dom";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, test } from "vitest";
 import CatFacts from "./CatFacts";
+import App from "./App";
 
 describe("CatFact", () => {
   beforeEach(() => {
@@ -18,4 +19,10 @@ describe("CatFact", () => {
     });
     render(CatFacts);
   });
+
+  test("renders Cat Fact Header", () => {
+    render(<App/>);
+    expect(screen.getByText(/cat fact/i)).toBeInTheDocument();
+  });
+
 });
