@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getData } from "./CallApi";
 
-export default function CatFacts({ fact }) {
+export default function CatFacts({}) {
   const [data, setData] = useState({});
   const [fact, setFact] = useState(null);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function load() {
       try {
@@ -13,16 +13,34 @@ export default function CatFacts({ fact }) {
         );
         setData(catFact);
         console.log(catFact);
-        setFact(data.fact);
+        if (catFact && catFact.data && catFact.data.length > 0) {
+          setFact(catFact.data[0].fact);
+          return data.data;
+        } else {
+          setFact("No cat fact found.");
+        }
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching cat fact:", error);
+        setError("Failed to fetch cat fact. Please try again later.");
+        setFact(null);
+      } finally {
+        setLoading(false); 
       }
     }
     load();
   }, [fact]);
+  if (loading) {
+    return (
+      <div>
+        <h2>Loading cat fact...</h2>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <h1>{fact ? <p>{fact}</p> : <p>No cat fact found.</p>}</h1>
+      <h1>Cat Fact:</h1>
+      <h2>{<p>{fact}</p>}</h2>
     </div>
   );
 }
